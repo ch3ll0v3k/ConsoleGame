@@ -1,23 +1,61 @@
 using System;
-
+using System.Timers;
 // :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 
 class MonoConsolelGame{
 
     // =====================================================================
-
+    static Timer aTimer;
+    static ConsoleKeyInfo CKI;
+    static MainWorld MW;
+    static int worldUpdateSpeed = 45;
     // =====================================================================
     static void Main(string[] argv){
 
         // -----------------------------------------------------------------
-        MainWorld MW = new MainWorld();
-        
+        int[] userPos = {10, 10};
+        int[] fieldSize = {90, 30};
+        // -----------------------------------------------------------------
+        MW = new MainWorld(fieldSize, userPos);
+        MW.InitWorld();
+
+        aTimer = new Timer();
+        RunTimer();
+        // -----------------------------------------------------------------
+        while(true){
+
+            CKI = Console.ReadKey();
+            MW.UpdateUserPos(CKI.Key);
+
+        }
         // -----------------------------------------------------------------
         //_ReadLine();
         // -----------------------------------------------------------------
 
     }
+    // =====================================================================
+    private static void RunTimer(){
+
+        // -----------------------------------------------------------------
+        aTimer = new System.Timers.Timer(worldUpdateSpeed); 
+        aTimer.Elapsed += UpdateWorldEvent;
+        aTimer.AutoReset = true;
+        aTimer.Enabled = true;
+        // -----------------------------------------------------------------
+
+    }
+
+    // =====================================================================
+    private static void UpdateWorldEvent(Object source, ElapsedEventArgs e){
+
+        // -----------------------------------------------------------------
+        MW.RedrawWord();
+        //_WriteLine("UpdateWorldEvent: called");
+        // -----------------------------------------------------------------
+
+    }
+
     // =====================================================================
     public static string GetSpaces(int offset){
         

@@ -5,21 +5,22 @@ using System;
 public class MainWorld{
 
     // =====================================================================
-    public int userPosX;
-    public int userPosY;
-
     public int fieldSizeX;
     public int fieldSizeY;
 
+    public int userPosX;
+    public int userPosY;
+
+
     // =====================================================================
-    public MainWorld(int[] fieldSizen, int[] userPos){
+    public MainWorld(int[] fieldSize, int[] userPos){
 
         // -----------------------------------------------------------------
-        userPosX = userPos[0];
-        userPosY = userPos[0];
+        fieldSizeX = fieldSize[0];
+        fieldSizeY = fieldSize[1];
 
-        userPosX = size[0];
-        userPosY = size[1];
+        userPosX = userPos[0];
+        userPosY = userPos[1];
 
 
         // -----------------------------------------------------------------
@@ -28,6 +29,36 @@ public class MainWorld{
 
     }
 
+    // =====================================================================
+    public void InitWorld(){
+
+        // -----------------------------------------------------------------
+        // -----------------------------------------------------------------
+
+    }
+    // =====================================================================
+    public void UpdateUserPos(ConsoleKey key){
+
+        // -----------------------------------------------------------------            
+        switch(key){
+            // -----------------------------
+            // Movement controls
+            case ConsoleKey.LeftArrow: userPosX--; break;
+            case ConsoleKey.UpArrow: userPosY--; break;
+            case ConsoleKey.RightArrow: userPosX++; break;
+            case ConsoleKey.DownArrow: userPosY++; break;
+            // -----------------------------
+        }
+        // -----------------------------------------------------------------
+
+    }
+    // =====================================================================
+    public string RedrawWord(){
+
+        // -----------------------------------------------------------------
+        // -----------------------------------------------------------------
+    
+    }
     // =====================================================================
     public string GetSpaces(int offset){
         
