@@ -11,13 +11,16 @@ public class MainWorld{
     public int userPosX;
     public int userPosY;
 
-    public int enemyPosX;
-    public int enemyPosY;
+    public float enemyPosX;
+    public float enemyPosY;
 
     public string USER_CHR = "#"; 
     public string ENEMY_CHR = "@"; 
     public string EMPTY_CHR = " "; 
     public string SOLID_CHR = "="; 
+
+    public float ENEMY_SPEED = 1.0F; //0.25F;
+
     //----------------------------------------
     // Filed
     
@@ -56,17 +59,17 @@ public class MainWorld{
         bool YIs200 = false;
         // -----------------------------------------------------------------            
         if(userPosX < enemyPosX){
-            enemyPosX--;
+            enemyPosX -= ENEMY_SPEED;
         }else if(userPosX > enemyPosX){
-            enemyPosX++;
+            enemyPosX += ENEMY_SPEED;
         }else{
             XIs200 = true;
         }
         // -----------------------------------------------------------------            
         if(userPosY < enemyPosY){
-            enemyPosY--;
+            enemyPosY -= ENEMY_SPEED;
         }else if(userPosY > enemyPosY){
-            enemyPosY++;
+            enemyPosY += ENEMY_SPEED;
         }else{
             XIs200 = true;
         }
