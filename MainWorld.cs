@@ -50,6 +50,35 @@ public class MainWorld{
 
     }
     // =====================================================================
+    public void UpdateAllEntitys(){
+
+        bool XIs200 = false;
+        bool YIs200 = false;
+        // -----------------------------------------------------------------            
+        if(userPosX < enemyPosX){
+            enemyPosX--;
+        }else if(userPosX > enemyPosX){
+            enemyPosX++;
+        }else{
+            XIs200 = true;
+        }
+        // -----------------------------------------------------------------            
+        if(userPosY < enemyPosY){
+            enemyPosY--;
+        }else if(userPosY > enemyPosY){
+            enemyPosY++;
+        }else{
+            XIs200 = true;
+        }
+        // -----------------------------------------------------------------            
+        if(XIs200 && YIs200){
+            //aTimer.Dispose();
+            Console.WriteLine(" Game Over! \nYou lose");
+        }
+        // -----------------------------------------------------------------            
+
+    }
+    // =====================================================================
     public void UpdateUserPos(ConsoleKey key){
 
         // -----------------------------------------------------------------            

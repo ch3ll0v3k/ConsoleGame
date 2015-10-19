@@ -26,8 +26,8 @@ class MonoConsolelGame{
         //MW.RedrawWord();
         while(true){
 
-            CKI = Console.ReadKey();
-            MW.UpdateUserPos(CKI.Key);
+            //CKI = Console.ReadKey();
+            MW.UpdateUserPos(Console.ReadKey().Key);
 
         }
         // -----------------------------------------------------------------
@@ -51,6 +51,7 @@ class MonoConsolelGame{
     private static void UpdateWorldEvent(Object source, ElapsedEventArgs e){
 
         // -----------------------------------------------------------------
+        MW.UpdateAllEntitys();
         MW.RedrawWord();
         //_WriteLine("UpdateWorldEvent: called");
         // -----------------------------------------------------------------
