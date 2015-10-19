@@ -9,13 +9,13 @@ class MonoConsolelGame{
     static Timer aTimer;
     static ConsoleKeyInfo CKI;
     static MainWorld MW;
-    static int worldUpdateSpeed = 45;
+    static int worldUpdateSpeed = 1000/24;
     // =====================================================================
     static void Main(string[] argv){
 
         // -----------------------------------------------------------------
         int[] userPos = {10, 10};
-        int[] fieldSize = {90, 30};
+        int[] fieldSize = {90, 34};
         // -----------------------------------------------------------------
         MW = new MainWorld(fieldSize, userPos);
         MW.InitWorld();
@@ -23,6 +23,7 @@ class MonoConsolelGame{
         aTimer = new Timer();
         RunTimer();
         // -----------------------------------------------------------------
+        //MW.RedrawWord();
         while(true){
 
             CKI = Console.ReadKey();

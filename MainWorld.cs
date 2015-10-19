@@ -11,6 +11,17 @@ public class MainWorld{
     public int userPosX;
     public int userPosY;
 
+    public int enemyPosX;
+    public int enemyPosY;
+
+    public string USER_CHR = "#"; 
+    public string ENEMY_CHR = "@"; 
+    public string EMPTY_CHR = " "; 
+    public string SOLID_CHR = "="; 
+    //----------------------------------------
+    // Filed
+    
+    public string SOLID_ROW = ""; 
 
     // =====================================================================
     public MainWorld(int[] fieldSize, int[] userPos){
@@ -22,7 +33,8 @@ public class MainWorld{
         userPosX = userPos[0];
         userPosY = userPos[1];
 
-
+        enemyPosX = _GetRandom(userPosX+10, fieldSizeX-2);
+        enemyPosY = _GetRandom(userPosY+10, fieldSizeY-2);
         // -----------------------------------------------------------------
         //_ReadLine();
         // -----------------------------------------------------------------
@@ -33,6 +45,7 @@ public class MainWorld{
     public void InitWorld(){
 
         // -----------------------------------------------------------------
+        CreateSolidRow();
         // -----------------------------------------------------------------
 
     }
@@ -43,32 +56,62 @@ public class MainWorld{
         switch(key){
             // -----------------------------
             // Movement controls
-            case ConsoleKey.LeftArrow: userPosX--; break;
-            case ConsoleKey.UpArrow: userPosY--; break;
-            case ConsoleKey.RightArrow: userPosX++; break;
-            case ConsoleKey.DownArrow: userPosY++; break;
+            case ConsoleKey.LeftArrow: 
+                if(userPosX < 1) break; userPosX -= 2; break;
+
+            case ConsoleKey.UpArrow: 
+                if(userPosY < 1) break; userPosY--; break;
+
+            case ConsoleKey.RightArrow: 
+                if(userPosX > fieldSizeX-3) break; userPosX += 2; break;
+
+            case ConsoleKey.DownArrow: 
+                if(userPosY > fieldSizeY-2) break; userPosY++; break;
+
             // -----------------------------
         }
         // -----------------------------------------------------------------
 
     }
     // =====================================================================
-    public string RedrawWord(){
+    public void RedrawWord(){
 
         // -----------------------------------------------------------------
+        Console.Clear();
+
+        Console.WriteLine("|"+SOLID_ROW+"|");
+        for(int _Y=0; _Y < fieldSizeY; _Y++){
+
+            string outLine = "";
+
+            for(int _X=0; _X < fieldSizeX; _X++){
+
+                // -----------------------------------------------            
+                if(_Y == userPosY && _X == userPosX)
+                    outLine += USER_CHR;
+                else
+                    outLine += EMPTY_CHR;
+
+                // -----------------------------------------------            
+                if(_Y == enemyPosY && _X == enemyPosX){ 
+                    outLine = outLine.Substring(0, outLine.Length - 1);
+                    outLine += ENEMY_CHR;
+                }
+                
+                // -----------------------------------------------            
+            }
+            Console.WriteLine("|"+outLine+"|");
+
+        }
+        Console.WriteLine("|"+SOLID_ROW+"|");
         // -----------------------------------------------------------------
     
     }
     // =====================================================================
-    public string GetSpaces(int offset){
+    public void CreateSolidRow(){
         
         // -----------------------------------------------------------------
-        string output = "";
-
-        for(int i=0; i < offset; i++){
-            output += " ";
-        }
-        return output;
+        for(int i=0; i < fieldSizeX; i++){ SOLID_ROW += SOLID_CHR; }
         // -----------------------------------------------------------------
 
     }
