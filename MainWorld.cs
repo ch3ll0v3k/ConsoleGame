@@ -5,6 +5,7 @@ using System;
 public class MainWorld{
 
     // =====================================================================
+    // User
     public int fieldSizeX;
     public int fieldSizeY;
 
@@ -14,17 +15,21 @@ public class MainWorld{
     public float enemyPosX;
     public float enemyPosY;
 
-    public string USER_CHR = "#"; 
-    public string ENEMY_CHR = "@"; 
-    public string EMPTY_CHR = " "; 
-    public string SOLID_CHR = "="; 
-
     public float ENEMY_SPEED = 1.0F; //0.25F;
 
     //----------------------------------------
     // Filed
-    
     public string SOLID_ROW = ""; 
+    public string DRAWER;
+
+    public string USER_CHR = "#"; 
+    public string ENEMY_CHR = "@"; 
+    public string EMPTY_CHR = " "; 
+    public string SOLID_CHR = "="; 
+    public string COL_SYM = "|"; 
+
+    public bool isAlife = true;
+    //----------------------------------------
 
     // =====================================================================
     public MainWorld(int[] fieldSize, int[] userPos){
@@ -45,7 +50,7 @@ public class MainWorld{
     }
 
     // =====================================================================
-    public void InitWorld(){
+    public void Init(){
 
         // -----------------------------------------------------------------
         CreateSolidRow();
@@ -111,31 +116,36 @@ public class MainWorld{
         // -----------------------------------------------------------------
         Console.Clear();
 
-        Console.WriteLine("|"+SOLID_ROW+"|");
+        Console.WriteLine(COL_SYM+SOLID_ROW+COL_SYM);
         for(int _Y=0; _Y < fieldSizeY; _Y++){
 
-            string outLine = "";
+            DRAWER = "";
 
             for(int _X=0; _X < fieldSizeX; _X++){
 
                 // -----------------------------------------------            
                 if(_Y == userPosY && _X == userPosX)
-                    outLine += USER_CHR;
+                    DRAWER += USER_CHR;
                 else
-                    outLine += EMPTY_CHR;
+                    DRAWER += EMPTY_CHR;
 
                 // -----------------------------------------------            
                 if(_Y == enemyPosY && _X == enemyPosX){ 
-                    outLine = outLine.Substring(0, outLine.Length - 1);
-                    outLine += ENEMY_CHR;
+                    DRAWER = DRAWER.Substring(0, DRAWER.Length - 1);
+                    DRAWER += ENEMY_CHR;
                 }
-                
+                // -----------------------------------------------            
+                // Check for collision
+
+                if(_Y == enemyPosY && _X == enemyPosX && _Y == userPosY && _X == userPosX){ 
+                    isAlife = false;
+                }
                 // -----------------------------------------------            
             }
-            Console.WriteLine("|"+outLine+"|");
+            Console.WriteLine(COL_SYM+DRAWER+COL_SYM);
 
         }
-        Console.WriteLine("|"+SOLID_ROW+"|");
+        Console.WriteLine(COL_SYM+SOLID_ROW+COL_SYM);
         // -----------------------------------------------------------------
     
     }

@@ -9,32 +9,84 @@ class MonoConsolelGame{
     static Timer aTimer;
     static ConsoleKeyInfo CKI;
     static MainWorld MW;
-    static int worldUpdateSpeed = 1000/24;
+    static int worldUpdateSpeed = 1000/20;
+
+
+
     // =====================================================================
     static void Main(string[] argv){
+
+        // -----------------------------------------------------------------
+        //File FS = new File(); // Red config from user.cnf
+
+        // -----------------------------------------------------------------
+        bool allowToRun = false;
+        string answ = "";
+
+        while(true){
+
+            // -------------------------------
+
+            Console.Clear();
+            _WriteLine("");
+            _WriteLine("\t\t|---------------------------------------------------------|");
+            _WriteLine("\t\t|               Welcome to Terminal Battle                |");
+            _WriteLine("\t\t|---------------------------------------------------------|");
+            _WriteLine("\t\t| Init new level (y)                                      |");
+            _WriteLine("\t\t| Continue level (c)                                      |");
+            _WriteLine("\t\t| Exit (q)                                                |");
+            _WriteLine("\t\t|---------------------------------------------------------|\n");
+
+            answ = _ReadLine().ToLower();
+
+            if(answ == "q"){
+                break;
+            }else if(answ == "y"){
+                allowToRun = true;
+                break;
+            }
+        }
+
+
+        // -----------------------------------------------------------------
+        if(allowToRun){
+            Updater();
+        }
+        // -----------------------------------------------------------------
+
+    }
+    // =====================================================================
+    private static void Updater(){
 
         // -----------------------------------------------------------------
         int[] userPos = {10, 10};
         int[] fieldSize = {90, 34};
         // -----------------------------------------------------------------
         MW = new MainWorld(fieldSize, userPos);
-        MW.InitWorld();
+        MW.Init();
 
         aTimer = new Timer();
         RunTimer();
         // -----------------------------------------------------------------
-        //MW.RedrawWord();
         while(true){
 
             //CKI = Console.ReadKey();
-            MW.UpdateUserPos(Console.ReadKey().Key);
+            if(!MW.isAlife){
+                aTimer.AutoReset = false;
+                aTimer.Enabled = false;
+                aTimer.Dispose();
+                Console.Clear();
+                YouLose();
+                break;
+            }else{
+                MW.UpdateUserPos(Console.ReadKey().Key);
+            }
+
 
         }
         // -----------------------------------------------------------------
-        //_ReadLine();
-        // -----------------------------------------------------------------
-
     }
+
     // =====================================================================
     private static void RunTimer(){
 
@@ -59,19 +111,19 @@ class MonoConsolelGame{
     }
 
     // =====================================================================
-    public static string GetSpaces(int offset){
-        
-        // -----------------------------------------------------------------
-        string output = "";
+    private static void YouLose(){
 
-        for(int i=0; i<offset; i++){
-            output += " ";
-        }
-        return output;
+        // -----------------------------------------------------------------
+        _WriteLine("");
+        _WriteLine("\t\t|---------------------------------------------------------|");
+        _WriteLine("\t\t|---------------------------------------------------------|");
+        _WriteLine("\t\t|                       You lose !!!                      |");
+        _WriteLine("\t\t|---------------------------------------------------------|");
+        _WriteLine("\t\t|---------------------------------------------------------|\n");
+
         // -----------------------------------------------------------------
 
     }
-
     // =====================================================================
     public static int _GetRandom(int A, int B){ 
         Random RND = new Random(); return RND.Next(A, B);
