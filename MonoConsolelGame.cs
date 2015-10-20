@@ -9,9 +9,10 @@ class MonoConsolelGame{
     static Timer aTimer;
     static ConsoleKeyInfo CKI;
     static MainWorld MW;
-    static int worldUpdateSpeed = 1000/20;
+    static int worldUpdateSpeed = 1000/24;
 
-
+    static bool DEBUG;
+    static bool SHOW_MENU = true;
 
     // =====================================================================
     static void Main(string[] argv){
@@ -23,26 +24,38 @@ class MonoConsolelGame{
         bool allowToRun = false;
         string answ = "";
 
-        while(true){
+        while(SHOW_MENU){
 
             Console.Clear();
             _WriteLine("");
             _WriteLine("\t\t|---------------------------------------------------------|");
             _WriteLine("\t\t|               Welcome to Terminal Battle                |");
             _WriteLine("\t\t|---------------------------------------------------------|");
-            _WriteLine("\t\t| Init new level (y)                                      |");
-            _WriteLine("\t\t| Continue level (c)                                      |");
-            _WriteLine("\t\t| Exit (q)                                                |");
+            _WriteLine("\t\t| 1)  Init new level (DEBUG ENABLE)                       |");
+            _WriteLine("\t\t| 2)  Init new level (DEBUG DISABLE)                      |");
+            _WriteLine("\t\t| 3)  Continue level                                      |");
+            _WriteLine("\t\t|                                                         |");
+            _WriteLine("\t\t| 4)  Exit                                                |");
             _WriteLine("\t\t|---------------------------------------------------------|\n");
 
             answ = _ReadLine().ToLower();
-
-            if(answ == "q"){
-                break;
-            }else if(answ == "y"){
-                allowToRun = true;
-                break;
+            // ------------------------------------
+            switch(answ){
+                // ________________________________
+                case "1":  
+                    DEBUG = true; allowToRun = true; SHOW_MENU = false; break;
+                // ________________________________
+                case "2":  
+                    DEBUG = false; allowToRun = true; SHOW_MENU = false; break;
+                // ________________________________
+                case "3":  
+                    allowToRun = true; SHOW_MENU = false; break;
+                // ________________________________
+                case "4":  
+                    allowToRun = false; SHOW_MENU = false; break;
+                // ________________________________
             }
+            // ------------------------------------
         }
 
 
@@ -63,7 +76,7 @@ class MonoConsolelGame{
         MW.Init();
 
         aTimer = new Timer();
-        RunTimer();
+        InitTimer();
         // -----------------------------------------------------------------
         while(true){
 
@@ -76,14 +89,16 @@ class MonoConsolelGame{
                 YouLose();
                 break;
             }else{
-                MW.UpdateUserPos(Console.ReadKey().Key);
+            
+                if(!DEBUG)
+                    MW.UpdateUserPos(Console.ReadKey().Key);
             }
         }
         // -----------------------------------------------------------------
     }
 
     // =====================================================================
-    private static void RunTimer(){
+    private static void InitTimer(){
 
         // -----------------------------------------------------------------
         aTimer = new System.Timers.Timer(worldUpdateSpeed); 
@@ -98,9 +113,23 @@ class MonoConsolelGame{
     private static void UpdateWorldEvent(Object source, ElapsedEventArgs e){
 
         // -----------------------------------------------------------------
-        MW.UpdateAllEntitys();
-        MW.RedrawWord();
-        //_WriteLine("UpdateWorldEvent: called");
+
+        if(!MW.isAlife){
+            aTimer.AutoReset = false;
+            aTimer.Enabled = false;
+            aTimer.Dispose();
+            Console.Clear();
+            YouLose();
+            return;
+
+        }else{
+
+            if(DEBUG)
+                MW.UpdateUserPos(Console.ReadKey().Key);
+            
+            MW.UpdateAllEntitys();
+            MW.RedrawWord();
+        }
         // -----------------------------------------------------------------
 
     }

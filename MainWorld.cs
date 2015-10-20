@@ -9,26 +9,29 @@ public class MainWorld{
     public int fieldSizeX;
     public int fieldSizeY;
 
-    public int userPosX;
-    public int userPosY;
+    public int platformPosX;
+    public int platformPosY;
 
     public float ballPosX;
     public float ballPosY;
 
-    public float BALL_SPEED = 1.0F; //0.25F;
+    
+    public int posXCorrection = 9;
+    public int posYCorrection = 1;
 
     //----------------------------------------
     // Filed
     public string SOLID_ROW = ""; 
     public string DRAWER;
 
-    public string USER_CHR = "##########"; 
-    public int USER_CHR_TOP_OFFSET = 5; 
+    public string PLATFORT_CHR = "##########"; 
+    public int PLATFORT_TOP_OFFSET = 5; 
 
-    public string BALL_CHR = "@"; 
+    public string BALL_CHR = "O"; 
+    public float BALL_SPEED = 1.0F; //0.25F;
     public string EMPTY_CHR = " "; 
     public string SOLID_CHR = "="; 
-    public string COL_SYM = "|"; 
+    public string COL_SHR = "|"; 
 
 
     //----------------------------------------
@@ -36,6 +39,8 @@ public class MainWorld{
     public bool XIs200 = false;
     public bool YIs200 = false;
 
+
+    public string MESSAGE = "";
     //----------------------------------------
     // 0 == NO MOVEMENT in eny direction of 'X' or 'Y'
     // '-1' == UP for 'Y' or LEFT for 'X'
@@ -45,6 +50,9 @@ public class MainWorld{
     private int _VecY = -1; 
 
     //----------------------------------------
+    // OPTIONS
+    public bool PAUSED = false;
+    //----------------------------------------
 
     // =====================================================================
     public MainWorld(int[] fieldSize){
@@ -53,11 +61,11 @@ public class MainWorld{
         fieldSizeX = fieldSize[0];
         fieldSizeY = fieldSize[1];
 
-        userPosX = ( (fieldSizeX/2)-(USER_CHR.Length/2) );
-        userPosY = ( (fieldSizeY - USER_CHR_TOP_OFFSET) );
+        platformPosX = ( (fieldSizeX/2)-(PLATFORT_CHR.Length/2) );
+        platformPosY = ( (fieldSizeY - PLATFORT_TOP_OFFSET) );
 
-        ballPosX = ( (fieldSizeX/2)-(USER_CHR.Length/2) );
-        ballPosY = userPosY + 2;
+        ballPosX = ( (fieldSizeX/2)-(PLATFORT_CHR.Length/2) );
+        ballPosY = platformPosY + 2;
         // -----------------------------------------------------------------
         //_ReadLine();
         // -----------------------------------------------------------------
@@ -75,50 +83,51 @@ public class MainWorld{
     // =====================================================================
     public void UpdateAllEntitys(){
 
+        // -----------------------------------------------------------------            
         XIs200 = false;
         YIs200 = false;
+        MESSAGE = "";
         // -----------------------------------------------------------------            
         // _Vector X movement
         if(_VecX < 0){
-
-            ballPosX--;
-            if(ballPosX < 1)
-                _VecX = 1;
-
+            ballPosX--; if(ballPosX < 1) _VecX = 1;
         }else if(_VecX > 0){
-
-            ballPosX++;
-            if(ballPosX > fieldSizeX-1)
-                _VecX = -1;
-        
-        } //else{ // No movement increase or decrease }
+            ballPosX++; if(ballPosX > fieldSizeX-1) _VecX = -1; 
+        } 
+        //else{ // No movement increase or decrease }
         // --------------------------
         // _Vector Y movement
-        if(_VecY < 0){
+        if(_VecY < 0){ 
+            ballPosY--; if(ballPosY < 1) _VecY = 1;
+        }else if(_VecY > 0){ 
 
-            ballPosY--;
-            if(ballPosY < 1)
-                _VecY = 1;
+            ballPosY++; 
 
-        }else if(_VecY > 0){
-
-            ballPosY++;
-            if(ballPosY > fieldSizeY-1)
+            if( 
+                (ballPosY == (platformPosY-posYCorrection) ) 
+                && 
+                (ballPosX >= (platformPosX-posXCorrection) ) 
+                && 
+                (ballPosX <= ((platformPosX-posXCorrection) + PLATFORT_CHR.Length) ) 
+            ){
+            
                 _VecY = -1;
-        
-        } //else{ // No movement increase or decrease }
 
-
-
-        // ballPosY +=
-        // XIs200 = true;
-        // -----------------------------------------------------------------            
-        /*
-        if(XIs200 && YIs200){
-            //aTimer.Dispose();
-            Console.WriteLine(" Game Over! \nYou lose");
-        }
-        */
+            }else if(
+                (ballPosY >= (platformPosY-posYCorrection) ) 
+                && (
+                    (ballPosX < (platformPosX-posXCorrection) ) 
+                    || 
+                    (ballPosX > ((platformPosX-posXCorrection) + PLATFORT_CHR.Length) ) 
+                )
+            ){
+                isAlife = false;
+                MESSAGE = " YOU LOSE ";
+            }else{
+                //isAlife = false;
+            }
+        } 
+        //else{ // No movement increase or decrease }
         // -----------------------------------------------------------------            
 
     }
@@ -129,10 +138,17 @@ public class MainWorld{
         switch(key){
             // -----------------------------
             // Movement controls
-            case ConsoleKey.LeftArrow: if(userPosX < USER_CHR.Length+1) break; userPosX -= 2; break;
-            //case ConsoleKey.UpArrow: if(userPosY < 1) break; userPosY--; break;
-            case ConsoleKey.RightArrow: if(userPosX > fieldSizeX-3) break; userPosX += 2; break;
-            //case ConsoleKey.DownArrow: if(userPosY > fieldSizeY-2) break; userPosY++; break;
+            case ConsoleKey.LeftArrow: if(platformPosX < PLATFORT_CHR.Length+1) break; platformPosX -= 2; break;
+            //case ConsoleKey.UpArrow: if(platformPosY < 1) break; platformPosY--; break;
+            case ConsoleKey.RightArrow: if(platformPosX > fieldSizeX-3) break; platformPosX += 2; break;
+            //case ConsoleKey.DownArrow: if(platformPosY > fieldSizeY-2) break; platformPosY++; break;
+            // -----------------------------
+            case ConsoleKey.P: 
+
+                PAUSED = !PAUSED;
+
+            break;
+            
             // -----------------------------
         }
         // -----------------------------------------------------------------
@@ -144,7 +160,7 @@ public class MainWorld{
         // -----------------------------------------------------------------
         Console.Clear();
 
-        Console.WriteLine(COL_SYM+SOLID_ROW+COL_SYM);
+        Console.WriteLine(COL_SHR + SOLID_ROW + COL_SHR);
         for(int _Y=0; _Y < fieldSizeY; _Y++){
 
             DRAWER = "";
@@ -152,9 +168,9 @@ public class MainWorld{
             for(int _X=0; _X < fieldSizeX; _X++){
 
                 // -----------------------------------------------            
-                if(_Y == userPosY && _X == userPosX){
-                    DRAWER = DRAWER.Substring(0, DRAWER.Length - USER_CHR.Length+1);
-                    DRAWER += USER_CHR;
+                if(_Y == platformPosY && _X == platformPosX){
+                    DRAWER = DRAWER.Substring(0, DRAWER.Length - PLATFORT_CHR.Length+1);
+                    DRAWER += PLATFORT_CHR;
                 }else
                     DRAWER += EMPTY_CHR;
 
@@ -164,16 +180,15 @@ public class MainWorld{
                     DRAWER += BALL_CHR;
                 }
                 // -----------------------------------------------            
-                // Check for collision
-                if(_Y == ballPosY && _X == ballPosX && _Y == userPosY && _X == userPosX){ 
-                    isAlife = false;
-                }
-                // -----------------------------------------------            
             }
-            Console.WriteLine(COL_SYM+DRAWER+COL_SYM);
+            Console.WriteLine(COL_SHR + DRAWER + COL_SHR);
 
         }
-        Console.WriteLine(COL_SYM+SOLID_ROW+COL_SYM);
+        Console.WriteLine(COL_SHR+SOLID_ROW+COL_SHR);
+        Console.WriteLine(COL_SHR + " PposX_L: " + (platformPosX-9).ToString() + " PposX_LR: " + ( platformPosX - posXCorrection + PLATFORT_CHR.Length ).ToString() + COL_SHR);
+        Console.WriteLine(COL_SHR + " P: " + platformPosX.ToString() + " | B: "+ ballPosX.ToString() + COL_SHR);
+        Console.WriteLine(COL_SHR + MESSAGE + COL_SHR);
+        Console.WriteLine(COL_SHR+SOLID_ROW+COL_SHR);
         // -----------------------------------------------------------------
     
     }
