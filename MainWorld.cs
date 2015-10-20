@@ -41,17 +41,20 @@ public class MainWorld{
 
 
     public string MESSAGE = "";
+    public string MESSAGE_PAUSE = "";
     //----------------------------------------
     // 0 == NO MOVEMENT in eny direction of 'X' or 'Y'
     // '-1' == UP for 'Y' or LEFT for 'X'
     // '+1' == DOWN for 'Y' or RIGHT for 'X'
 
-    private int _VecX = 1; 
+    private int _VecX = 0; 
     private int _VecY = -1; 
 
     //----------------------------------------
     // OPTIONS
     public bool PAUSED = false;
+    //----------------------------------------
+    public int worldUpdateSpeed = 1000/20;
     //----------------------------------------
 
     // =====================================================================
@@ -67,7 +70,9 @@ public class MainWorld{
         ballPosX = ( (fieldSizeX/2)-(PLATFORT_CHR.Length/2) );
         ballPosY = platformPosY + 2;
         // -----------------------------------------------------------------
-        //_ReadLine();
+        while(_VecX == 0)
+            _VecX = _GetRandom(-1, 1);
+
         // -----------------------------------------------------------------
 
     }
@@ -143,9 +148,9 @@ public class MainWorld{
             case ConsoleKey.RightArrow: if(platformPosX > fieldSizeX-3) break; platformPosX += 2; break;
             //case ConsoleKey.DownArrow: if(platformPosY > fieldSizeY-2) break; platformPosY++; break;
             // -----------------------------
-            case ConsoleKey.P: 
+            case ConsoleKey.P:
 
-                PAUSED = !PAUSED;
+                PAUSED = !PAUSED; MESSAGE_PAUSE = " "+((PAUSED) ? "PAUSED = true" : "PAUSED = false");
 
             break;
             
@@ -188,6 +193,7 @@ public class MainWorld{
         Console.WriteLine(COL_SHR + " PposX_L: " + (platformPosX-9).ToString() + " PposX_LR: " + ( platformPosX - posXCorrection + PLATFORT_CHR.Length ).ToString() + COL_SHR);
         Console.WriteLine(COL_SHR + " P: " + platformPosX.ToString() + " | B: "+ ballPosX.ToString() + COL_SHR);
         Console.WriteLine(COL_SHR + MESSAGE + COL_SHR);
+        Console.WriteLine(COL_SHR + MESSAGE_PAUSE + COL_SHR);
         Console.WriteLine(COL_SHR+SOLID_ROW+COL_SHR);
         // -----------------------------------------------------------------
     

@@ -9,7 +9,7 @@ class MonoConsolelGame{
     static Timer aTimer;
     static ConsoleKeyInfo CKI;
     static MainWorld MW;
-    static int worldUpdateSpeed = 1000/24;
+    //static int worldUpdateSpeed = 1000/18;
 
     static bool DEBUG;
     static bool SHOW_MENU = true;
@@ -101,7 +101,7 @@ class MonoConsolelGame{
     private static void InitTimer(){
 
         // -----------------------------------------------------------------
-        aTimer = new System.Timers.Timer(worldUpdateSpeed); 
+        aTimer = new System.Timers.Timer(MW.worldUpdateSpeed); 
         aTimer.Elapsed += UpdateWorldEvent;
         aTimer.AutoReset = true;
         aTimer.Enabled = true;
@@ -113,7 +113,6 @@ class MonoConsolelGame{
     private static void UpdateWorldEvent(Object source, ElapsedEventArgs e){
 
         // -----------------------------------------------------------------
-
         if(!MW.isAlife){
             aTimer.AutoReset = false;
             aTimer.Enabled = false;
@@ -124,14 +123,15 @@ class MonoConsolelGame{
 
         }else{
 
-            if(DEBUG)
+            if(DEBUG){
                 MW.UpdateUserPos(Console.ReadKey().Key);
+            }
             
             MW.UpdateAllEntitys();
             MW.RedrawWord();
+
         }
         // -----------------------------------------------------------------
-
     }
 
     // =====================================================================
