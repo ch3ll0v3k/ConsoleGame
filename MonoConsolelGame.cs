@@ -25,8 +25,6 @@ class MonoConsolelGame{
 
         while(true){
 
-            // -------------------------------
-
             Console.Clear();
             _WriteLine("");
             _WriteLine("\t\t|---------------------------------------------------------|");
@@ -59,10 +57,9 @@ class MonoConsolelGame{
     private static void Updater(){
 
         // -----------------------------------------------------------------
-        int[] userPos = {10, 10};
         int[] fieldSize = {90, 34};
         // -----------------------------------------------------------------
-        MW = new MainWorld(fieldSize, userPos);
+        MW = new MainWorld(fieldSize);
         MW.Init();
 
         aTimer = new Timer();
@@ -81,8 +78,6 @@ class MonoConsolelGame{
             }else{
                 MW.UpdateUserPos(Console.ReadKey().Key);
             }
-
-
         }
         // -----------------------------------------------------------------
     }
